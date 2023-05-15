@@ -1,21 +1,14 @@
 import { Wrapper } from '../../modules/common/components/ui/Wrapper';
-import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { useGetPodDetails } from '../../modules/pods/hooks/useGetPodDetails';
+import { useParams } from 'react-router-dom';
 import { Nothing } from '../../modules/common/components/ui/Nothing';
 import { Loader } from '../../modules/common/components/ui/Loader';
-import clsx from 'clsx';
-import {
-	Bars4Icon,
-	ArrowPathIcon,
-	InformationCircleIcon,
-	CheckBadgeIcon,
-	CheckCircleIcon,
-} from '@heroicons/react/24/solid';
 import { useGetContainerLogs } from '../../modules/pods/hooks/useGetContainerLogs';
+import { useState } from 'react';
 
 export const LogsView = () => {
 	const { containerName, podName, namespace } = useParams();
-	const [searchParams] = useSearchParams();
+
+	const [showTags, setShowTags] = useState(false);
 
 	const getContainerLogsQuery = useGetContainerLogs(
 		namespace,
@@ -23,9 +16,7 @@ export const LogsView = () => {
 		containerName,
 	);
 	if (getContainerLogsQuery.error) throw getContainerLogsQuery.error;
-
 	if (getContainerLogsQuery.isLoading) return <Loader />;
-
 	if (!getContainerLogsQuery.data)
 		return (
 			<Wrapper>
@@ -35,17 +26,34 @@ export const LogsView = () => {
 
 	return (
 		<Wrapper>
-			<div>
+			<header className=''>
+				<h1 className='text-2xl font-bold'><span className='text-black/60'>Logs of</span> <i>{containerName}</i></h1>
+				<div className='text-gray-500'>{podName}</div>
+
+				<div className='flex items-center mt-2'>
+					<button
+						onClick={() => setShowTags(prev => !prev)}
+						className='px-2 py-1 text-xs font-mono text-gray-500 border border-gray-300 rounded-md hover:bg-gray-100'
+					>
+						{showTags ? 'Hide' : 'Show'} tags
+					</button>
+				</div>
+			</header>
+			<div className='mt-4'>
 				{getContainerLogsQuery.data.map((l, index) => (
 					<div key={index} className='hover:bg-gray-100'>
 						<div key={index} className='py-1 text-xs font-mono'>
 							<DateTag date={l.date} />
 							<span className='select-none'> </span>
-							{/* {Object.entries(l.tags ?? []).map(([k, v]) => (
-								<span className='inline-block mb-1 mr-1 text-xs bg-gray-200 rounded-full px-2 py-0.5'>
-									{k}: <span>{v}</span>
-								</span>
-							))} */}
+							{showTags &&
+								Object.entries(l.tags ?? []).map(([k, v]) => (
+									<span
+										style={{ color: getProceduralColor(k) }}
+										className='inline text-xs'
+									>
+										{k}: <span>{v}</span>{' '}
+									</span>
+								))}
 							{/* <div className='text-sm font-bold'>{l.message}</div> */}
 							<span className='inline-block text-xs'>{l.message}</span>
 						</div>
@@ -72,4 +80,15 @@ export const DateTag: React.FC<{ date: string | null }> = ({ date }) => {
 			})}
 		</span>
 	);
+};
+
+// get hex color from string with brightness of 50%
+const getProceduralColor = (str: string) => {
+	const hash = str.split('').reduce((acc, char) => char.charCodeAt(0) + acc, 0);
+
+	const color = `#${Math.floor(
+		Math.abs(Math.sin(hash) * 16777215) % 16777215,
+	).toString(16)}`;
+
+	return color;
 };

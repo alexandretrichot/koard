@@ -5,16 +5,13 @@ import { DrawerContextProvider } from './modules/common/contexts/DrawerContext';
 import { App } from './App';
 
 import './index.css';
-import { MainLayout } from './modules/common/components/layout/MainLayout';
-import { Toaster } from 'react-hot-toast';
 
 const main = async () => {
 	const queryClient = new QueryClient({
 		defaultOptions: {
-			/* queries: {
+			queries: {
 				retry: false,
-				staleTime: 1000 * 60, // 1 minute
-			}, */
+			},
 		},
 	});
 

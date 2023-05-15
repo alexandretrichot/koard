@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"koard/pkg/utils"
 	"strings"
 	"time"
 
@@ -64,7 +65,7 @@ func (s *Service) GetPod(ctx context.Context, namespace string, podName string) 
 		return nil, err
 	}
 
-	//utils.Debug(kPod)
+	utils.Debug(kPod)
 
 	pod := PodDetails{
 		Pod: Pod{
@@ -72,6 +73,10 @@ func (s *Service) GetPod(ctx context.Context, namespace string, podName string) 
 			Namespace:       kPod.Namespace,
 			Uid:             string(kPod.GetUID()),
 			Status:          getPodStatus(*kPod),
+			StatusMessage:   kPod.Status.Message,
+			StatusReason:    kPod.Status.Reason,
+			HostIP:          kPod.Status.HostIP,
+			PodIP:           kPod.Status.PodIP,
 			ResourceVersion: kPod.ResourceVersion,
 			Labels:          kPod.Labels,
 			CreatedAt:       kPod.CreationTimestamp.Time,

@@ -26,6 +26,10 @@ type Pod struct {
 	Name            string            `json:"name"`
 	Uid             string            `json:"uid"`
 	Status          PodStatus         `json:"status"`
+	StatusMessage   string            `json:"statusMessage"`
+	StatusReason    string            `json:"statusReason"`
+	HostIP          string            `json:"hostIP"`
+	PodIP           string            `json:"podIP"`
 	ResourceVersion string            `json:"resourceVersion"`
 	CreatedAt       time.Time         `json:"createdAt"`
 	Labels          map[string]string `json:"labels"`

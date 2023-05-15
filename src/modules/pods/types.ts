@@ -5,6 +5,10 @@ export type Pod = {
 	resourceVersion: string;
 	createdAt: string;
 	status: PodStatus;
+	statusMessage: string;
+	statusReason: string;
+	hostIP: string;
+	podIP: string;
 	labels: Record<string, string>;
 };
 
@@ -33,6 +37,13 @@ export type PodContainer = {
 			containerID: string;
 		};
 	};
+	ports: {
+		name: string;
+		hostPort: number;
+		containerPort: number;
+		protocol: string;
+		hostIP: string;
+	}[];
 	ready: boolean;
 	started?: boolean;
 	restartCount: number;

@@ -14,6 +14,7 @@ import {
 } from '@heroicons/react/24/solid';
 import { useMemo } from 'react';
 import { PodStatus } from '../../modules/pods/types';
+import { ServerIcon } from '@heroicons/react/24/outline';
 
 export const PodDetailsView = () => {
 	const { podName, namespace } = useParams();
@@ -38,8 +39,8 @@ export const PodDetailsView = () => {
 
 		if (getPodDetailsQuery.data?.status === PodStatus.Succeeded)
 			return {
-				class: 'border border-green-600 bg-white',
-				text: 'Running',
+				class: 'border-2 border-green-600 bg-white',
+				text: 'Succeeded',
 			};
 
 		return {
@@ -76,6 +77,14 @@ export const PodDetailsView = () => {
 							</h1>
 						</div>
 						<div className='text-sm text-gray-700'>{podStatus.text}</div>
+						{getPodDetailsQuery.data.statusReason && (
+							<div className='mt-2'>
+								<span className='font-bold'>
+									{getPodDetailsQuery.data.statusReason}
+								</span>
+								: {getPodDetailsQuery.data.statusMessage}
+							</div>
+						)}
 					</div>
 				</div>
 				<div className='my-4 flex flex-wrap gap-2'>
@@ -88,7 +97,6 @@ export const PodDetailsView = () => {
 						</div>
 					))}
 				</div>
-				<div className='my-4'>TODO: Ports</div>
 
 				<div className='my-8'>
 					<h2 className='font-bold text-xl'>Containers</h2>
@@ -110,7 +118,7 @@ export const PodDetailsView = () => {
 														? 'bg-yellow-500'
 														: container.state.terminated
 														? container.state.terminated.exitCode === 0
-															? 'border border-green-600 bg-white'
+															? 'border-2 border-green-600 bg-white'
 															: 'bg-red-500'
 														: 'bg-gray-500',
 												)}
@@ -186,7 +194,7 @@ export const PodDetailsView = () => {
 										)}
 									</div>
 								)}
-								{container.state.terminated?.exitCode && (
+								{!!container.state.terminated?.exitCode && (
 									<div className='my-1'>
 										<div className='text-red-600'>
 											<div>
@@ -225,6 +233,44 @@ export const PodDetailsView = () => {
 										</span>
 									</div>
 								</div>
+
+								{!!container.ports.length && (
+									<div>
+										<h4 className='font-bold'>Ports</h4>
+										<div className='flex flex-wrap gap-4 my-2'>
+											{container.ports.map(port => (
+												<div
+													key={port.name}
+													className='flex items-center gap-1'
+												>
+													<ServerIcon className='h-4 w-4' />
+													<span className='text-gray-600'>{port.name}</span>
+													<span className='font-bold' aria-label='Port'>
+														{port.containerPort}
+													</span>
+												</div>
+											))}
+										</div>
+										{/* <div className='grid grid-cols-2 gap-2'>
+											{container.ports.map(port => (
+												<div
+													key={port.name}
+													className='border border-gray-300 rounded-md p-2'
+												>
+													<div className='text-sm text-gray-500'>
+														{port.protocol}
+													</div>
+													<div className='text-lg font-bold'>
+														{port.containerPort}
+													</div>
+													<div className='text-sm text-gray-500'>
+														{port.name}
+													</div>
+												</div>
+											))}
+										</div> */}
+									</div>
+								)}
 							</div>
 						);
 					})}
