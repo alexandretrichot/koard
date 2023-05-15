@@ -40,15 +40,6 @@ export const SideBar: React.FC<SideBarProps> = () => {
 								Pods
 							</SideBarLink>
 						</li>
-						<li>
-							<SideBarLink
-								pathname='/services'
-								icon={<CubeTransparentIcon />}
-								namespaced
-							>
-								Services
-							</SideBarLink>
-						</li>
 					</ul>
 				</div>
 			</aside>
@@ -82,7 +73,7 @@ export const SideBarLink: React.FC<SideBarLinkProps> = ({
 
 	return (
 		<Link
-			to={{pathname, search: searchParams.toString()}}
+			to={{ pathname, search: searchParams.toString() }}
 			className='flex items-center p-2 text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100 overflow-hidden'
 		>
 			{React.cloneElement(icon, {
