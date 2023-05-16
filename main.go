@@ -13,7 +13,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
 )
 
-var port = 3000
+var port = 5555
 
 //go:embed "dist/*"
 var embedDirStatic embed.FS
