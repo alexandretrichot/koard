@@ -79,7 +79,7 @@ export const SideBarLink: React.FC<SideBarLinkProps> = ({
 			{React.cloneElement(icon, {
 				className: clsx(
 					'flex-shrink-0 w-6 h-6 transition duration-75 group-hover:text-gray-900',
-					isActive ? 'text-indigo-700' : 'text-gray-500',
+					isActive ? 'text-primary' : 'text-gray-500',
 				),
 			})}
 			<span

@@ -5,6 +5,8 @@ import { useDrawerContext } from '../../contexts/DrawerContext';
 import { Link } from 'react-router-dom';
 import { NamespaceSelector } from '../../../namespaces/components/NamespaceSelector';
 
+import iconUrl from '../../../../../public/icon.svg';
+
 export type AppBarProps = {};
 
 export const AppBar: React.FC<AppBarProps> = () => {
@@ -19,8 +21,9 @@ export const AppBar: React.FC<AppBarProps> = () => {
 				>
 					<Bars3Icon className='h-6' />
 				</button>
-				<div className='font-bold text-xl m-2 sm:mr-8'>
-					<Link to='/'>k8s-dashboard</Link>
+				<div className='font-bold text-xl m-2 sm:mr-8 flex items-center gap-2'>
+					<img className='h-6' src={iconUrl} alt='logo' />
+					<Link to='/'>koard</Link>
 				</div>
 			</div>
 			<div className='w-full sm:w-64'>
